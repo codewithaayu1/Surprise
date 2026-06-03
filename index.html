@@ -63,7 +63,7 @@
   .film-grain {
     position: absolute;
     inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='256' height='256' fill='%23000'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctave='4' result='noise'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' fill='%23000000' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
     pointer-events: none;
     z-index: 2;
     animation: grain 0.3s steps(1) infinite;
@@ -206,6 +206,522 @@
   @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ============ GIFT BOX SECTION ============ */
+  #giftbox {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #1a0a14 0%, #0d0010 100%);
+    padding: 80px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .gift-container {
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .gift-header {
+    margin-bottom: 50px;
+  }
+
+  .gift-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--pink);
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+  }
+
+  .gift-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 8vw, 70px);
+    color: white;
+    line-height: 1;
+    margin-bottom: 15px;
+  }
+
+  .gift-title span { color: var(--pink); }
+
+  .gift-description {
+    font-size: 15px;
+    color: #ffffff77;
+    line-height: 1.6;
+  }
+
+  /* 3D Gift Box */
+  .gift-box-wrapper {
+    perspective: 1000px;
+    margin: 50px 0;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .gift-box {
+    width: 200px;
+    height: 200px;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: boxFloat 3s ease-in-out infinite;
+    cursor: pointer;
+    transition: transform 0.6s ease;
+  }
+
+  .gift-box:hover {
+    transform: scale(1.1);
+  }
+
+  .gift-box.opened {
+    animation: boxOpen 1s ease forwards;
+  }
+
+  .gift-box-side {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 80px;
+    font-weight: bold;
+    opacity: 0.9;
+    border: 3px solid var(--pink);
+  }
+
+  .gift-box-front {
+    background: linear-gradient(135deg, var(--deep-pink), var(--pink));
+    transform: translateZ(100px);
+  }
+
+  .gift-box-back {
+    background: linear-gradient(135deg, var(--pink), var(--deep-pink));
+    transform: rotateY(180deg) translateZ(100px);
+  }
+
+  .gift-box-right {
+    background: linear-gradient(135deg, #ff85ad, var(--pink));
+    transform: rotateY(90deg) translateZ(100px);
+  }
+
+  .gift-box-left {
+    background: linear-gradient(135deg, var(--deep-pink), #ff4081);
+    transform: rotateY(-90deg) translateZ(100px);
+  }
+
+  .gift-box-top {
+    background: linear-gradient(135deg, var(--gold), var(--pink));
+    transform: rotateX(90deg) translateZ(100px);
+  }
+
+  .gift-box-bottom {
+    background: linear-gradient(135deg, var(--deep-pink), var(--purple));
+    transform: rotateX(-90deg) translateZ(100px);
+  }
+
+  .gift-ribbon {
+    position: absolute;
+    width: 30px;
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), transparent, var(--gold));
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+  }
+
+  .gift-bow {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 60px;
+    background: var(--gold);
+    border-radius: 50%;
+    z-index: 20;
+    animation: bowBounce 2s ease-in-out infinite;
+  }
+
+  @keyframes boxFloat {
+    0%, 100% { transform: translateY(0) rotateX(0) rotateY(0); }
+    50% { transform: translateY(-20px) rotateX(5deg) rotateY(5deg); }
+  }
+
+  @keyframes boxOpen {
+    0% { transform: rotateY(0) rotateX(0); }
+    50% { transform: rotateY(45deg) rotateX(45deg); }
+    100% { transform: rotateY(90deg) rotateX(90deg) translateY(-300px); }
+  }
+
+  @keyframes bowBounce {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.1); }
+  }
+
+  .gift-content {
+    display: none;
+    animation: revealGift 0.8s ease forwards;
+  }
+
+  .gift-content.revealed {
+    display: block;
+  }
+
+  @keyframes revealGift {
+    from { opacity: 0; transform: scale(0.5) translateY(50px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .gift-message {
+    background: rgba(255,107,157,0.1);
+    border: 2px solid var(--pink);
+    border-radius: 20px;
+    padding: 30px;
+    margin-top: 30px;
+    position: relative;
+  }
+
+  .gift-message-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: white;
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+
+  .confetti {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ============ MEMORY GAME SECTION ============ */
+  #memorygame {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #0d0010 0%, #1a0520 50%, #0d0010 100%);
+    padding: 80px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .game-container {
+    max-width: 700px;
+    width: 100%;
+  }
+
+  .game-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .game-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--pink);
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+  }
+
+  .game-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 8vw, 70px);
+    color: white;
+    margin-bottom: 10px;
+  }
+
+  .game-title span { color: var(--gold); }
+
+  .game-stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+
+  .game-stat {
+    text-align: center;
+  }
+
+  .game-stat-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: #ffffff77;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+
+  .game-stat-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--pink);
+  }
+
+  .memory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 15px;
+    margin: 40px 0;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .memory-card {
+    aspect-ratio: 1;
+    background: rgba(255,107,157,0.1);
+    border: 2px solid rgba(255,107,157,0.3);
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .memory-card:hover {
+    border-color: var(--pink);
+    background: rgba(255,107,157,0.15);
+    transform: scale(1.05);
+  }
+
+  .memory-card.flipped {
+    background: rgba(255,107,157,0.2);
+    border-color: var(--pink);
+  }
+
+  .memory-card.matched {
+    background: rgba(76, 175, 80, 0.2);
+    border-color: #4caf50;
+  }
+
+  .game-message {
+    text-align: center;
+    margin-top: 30px;
+    padding: 20px;
+    background: rgba(255,107,157,0.08);
+    border-radius: 12px;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .game-message-text {
+    font-size: 16px;
+    color: #ffffffcc;
+  }
+
+  .game-reset-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 14px 40px;
+    background: linear-gradient(135deg, var(--deep-pink), var(--pink));
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .game-reset-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px #ff6b9d66;
+  }
+
+  /* ============ LOVE LETTER DECODER ============ */
+  #loveletter {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #1a0010 0%, #0d0005 100%);
+    padding: 80px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .letter-container {
+    max-width: 700px;
+    width: 100%;
+  }
+
+  .letter-header {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+
+  .letter-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--pink);
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+  }
+
+  .letter-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 8vw, 70px);
+    color: var(--gold);
+    margin-bottom: 15px;
+  }
+
+  .letter-subtitle {
+    font-size: 15px;
+    color: #ffffff77;
+  }
+
+  .envelope {
+    background: linear-gradient(145deg, rgba(255,107,157,0.1), rgba(255,107,157,0.05));
+    border: 2px solid rgba(255,107,157,0.3);
+    border-radius: 20px;
+    padding: 40px;
+    margin: 40px 0;
+    position: relative;
+    transition: all 0.3s ease;
+  }
+
+  .envelope.opened {
+    background: rgba(255,107,157,0.1);
+    border-color: var(--pink);
+    box-shadow: 0 0 30px var(--pink);
+  }
+
+  .encrypted-message {
+    background: rgba(0,0,0,0.3);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-family: 'Space Mono', monospace;
+    color: var(--gold);
+    letter-spacing: 3px;
+    word-break: break-all;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .decoder-questions {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .question-box {
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(255,107,157,0.2);
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s ease;
+  }
+
+  .question-box:hover {
+    border-color: var(--pink);
+    background: rgba(255,107,157,0.1);
+  }
+
+  .question-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: white;
+    margin-bottom: 15px;
+  }
+
+  .question-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .option-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  .option-input {
+    cursor: pointer;
+    accent-color: var(--pink);
+  }
+
+  .option-text {
+    font-size: 14px;
+    color: #ffffffcc;
+  }
+
+  .decode-btn {
+    display: inline-block;
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--deep-pink), var(--pink));
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 3px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+  }
+
+  .decode-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px #ff6b9d66;
+  }
+
+  .decoded-content {
+    display: none;
+    animation: fadeInUp 0.8s ease;
+  }
+
+  .decoded-content.revealed {
+    display: block;
+  }
+
+  .love-message {
+    background: linear-gradient(145deg, rgba(255,107,157,0.15), rgba(255,107,157,0.05));
+    border: 2px solid var(--pink);
+    border-radius: 20px;
+    padding: 30px;
+    margin-top: 30px;
+    text-align: center;
+  }
+
+  .love-message-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: white;
+    line-height: 2;
+    margin-bottom: 20px;
+  }
+
+  .love-message-signature {
+    font-family: 'Kalam', cursive;
+    font-size: 24px;
+    color: var(--pink);
+    text-align: right;
+    margin-top: 30px;
   }
 
   /* ============ LOVE COUNTER SECTION ============ */
@@ -998,1071 +1514,754 @@
   }
 
   .prank-story {
-    font-size: 16px;
-    line-height: 1.8;
+    font-size: 15px;
     color: #ffffffcc;
-    margin-bottom: 30px;
-  }
-
-  .prank-story strong { color: var(--pink); }
-
-  .police-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background: rgba(255,215,0,0.1);
-    border: 1px solid var(--gold);
-    border-radius: 50px;
-    padding: 10px 24px;
-    font-family: 'Space Mono', monospace;
-    font-size: 12px;
-    color: var(--gold);
-    letter-spacing: 2px;
-    margin-top: 15px;
-    animation: pulse 2s ease-in-out infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { box-shadow: 0 0 10px #ffd70033; }
-    50% { box-shadow: 0 0 30px #ffd70066; }
-  }
-
-  /* ============ SECTION 8: TIME CAPSULE ============ */
-  #capsule {
-    min-height: 100vh;
-    background: #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 80px 20px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .capsule-bg {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at 50% 50%, #1a0020 0%, #000 70%);
-  }
-
-  .capsule-container {
-    position: relative;
-    z-index: 2;
-    max-width: 650px;
-    width: 100%;
-    text-align: center;
-  }
-
-  .lock-icon {
-    font-size: 80px;
-    display: block;
-    margin-bottom: 20px;
-    animation: glowPulse 2s ease-in-out infinite;
-  }
-
-  @keyframes glowPulse {
-    0%, 100% { filter: drop-shadow(0 0 10px #ff6b9d); }
-    50% { filter: drop-shadow(0 0 30px #ff6b9d) drop-shadow(0 0 60px #c2185b); }
-  }
-
-  .capsule-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(45px, 8vw, 80px);
-    color: white;
-    margin-bottom: 10px;
-  }
-
-  .capsule-subtitle {
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    color: var(--pink);
-    font-size: 18px;
-    margin-bottom: 40px;
-  }
-
-  .capsule-box {
-    background: linear-gradient(145deg, #1a0015, #0d0010);
-    border: 2px solid rgba(255,107,157,0.3);
-    border-radius: 20px;
-    padding: 40px;
-    margin-bottom: 30px;
-    position: relative;
-  }
-
-  .capsule-locked {
-    display: block;
-  }
-
-  .capsule-unlocked {
-    display: none;
-  }
-
-  .capsule-date-display {
-    font-family: 'Space Mono', monospace;
-    font-size: 28px;
-    color: var(--gold);
-    letter-spacing: 4px;
-    margin-bottom: 20px;
-  }
-
-  .capsule-hint {
-    font-size: 14px;
-    color: #ffffff55;
-    margin-bottom: 30px;
-    line-height: 1.7;
-  }
-
-  .unlock-input {
-    width: 100%;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,107,157,0.3);
-    border-radius: 12px;
-    padding: 16px 20px;
-    color: white;
-    font-family: 'Space Mono', monospace;
-    font-size: 20px;
-    text-align: center;
-    letter-spacing: 8px;
-    outline: none;
-    transition: border-color 0.3s;
-    margin-bottom: 15px;
-  }
-
-  .unlock-input:focus { border-color: var(--pink); }
-
-  .unlock-btn {
-    padding: 14px 40px;
-    background: transparent;
-    border: 2px solid var(--pink);
-    color: var(--pink);
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    letter-spacing: 3px;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-
-  .unlock-btn:hover { background: var(--pink); color: white; }
-
-  .wrong-shake { animation: shake 0.4s ease; }
-  @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-10px); }
-    75% { transform: translateX(10px); }
-  }
-
-  .letter-reveal {
-    text-align: left;
-    line-height: 1.9;
-    color: #ffffffdd;
-    font-size: 16px;
-  }
-
-  .letter-reveal p { margin-bottom: 16px; }
-  .letter-reveal strong { color: var(--pink); }
-
-  .letter-signature {
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    font-size: 22px;
-    color: var(--gold);
-    text-align: right;
-    margin-top: 20px;
-  }
-
-  /* ============ SECTION 9: OUTRO ============ */
-  #outro {
-    min-height: 60vh;
-    background: #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 80px 20px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hearts-bg {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-
-  .floating-heart {
-    position: absolute;
-    font-size: var(--size);
-    animation: floatUp var(--dur) ease-in infinite;
-    animation-delay: var(--delay);
-    opacity: 0;
-  }
-
-  @keyframes floatUp {
-    0% { opacity: 0; transform: translateY(0) rotate(0deg); }
-    20% { opacity: 1; }
-    80% { opacity: 1; }
-    100% { opacity: 0; transform: translateY(-100vh) rotate(360deg); }
-  }
-
-  .outro-content {
-    position: relative;
-    z-index: 2;
-  }
-
-  .outro-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(30px, 5vw, 55px);
-    color: white;
-    margin-bottom: 20px;
-    line-height: 1.3;
-  }
-
-  .outro-title span { color: var(--pink); font-style: italic; }
-
-  .outro-sub {
-    font-size: 16px;
-    color: #ffffff77;
-    max-width: 500px;
-    margin: 0 auto 40px;
     line-height: 1.8;
+    margin-bottom: 30px;
   }
 
-  .outro-heart {
-    font-size: 80px;
-    display: block;
-    animation: heartBeat 1.2s ease-in-out infinite;
-  }
-
-  /* Nav dots */
-  .nav-dots {
-    position: fixed;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    z-index: 100;
-  }
-
-  .nav-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: rgba(255,107,157,0.3);
-    cursor: pointer;
-    transition: all 0.3s;
-    border: 1px solid rgba(255,107,157,0.5);
-  }
-
-  .nav-dot.active {
-    background: var(--pink);
-    box-shadow: 0 0 10px var(--pink);
-    transform: scale(1.5);
-  }
-
-  /* Confetti */
-  .confetti {
-    position: fixed;
-    pointer-events: none;
-  }
-
-  /* Popup */
-  .popup-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s;
-    padding: 20px;
-  }
-
-  .popup-overlay.show { opacity: 1; pointer-events: all; }
-
-  .popup-box {
-    background: linear-gradient(145deg, #1a0015, #2d0020);
-    border: 1px solid rgba(255,107,157,0.4);
-    border-radius: 20px;
-    padding: 40px;
-    max-width: 450px;
-    width: 100%;
-    text-align: center;
-    transform: scale(0.8);
-    transition: transform 0.3s;
-  }
-
-  .popup-overlay.show .popup-box { transform: scale(1); }
-
-  .popup-emoji { font-size: 50px; margin-bottom: 15px; display: block; }
-  .popup-title { font-family: 'Playfair Display', serif; font-size: 22px; color: white; margin-bottom: 10px; }
-  .popup-text { font-size: 14px; color: #ffffffaa; line-height: 1.7; margin-bottom: 20px; }
-  .popup-close {
-    padding: 10px 30px;
-    background: var(--pink);
-    border: none;
-    border-radius: 50px;
+  .prank-btn {
+    display: inline-block;
+    padding: 14px 40px;
+    background: linear-gradient(135deg, var(--deep-pink), var(--pink));
     color: white;
     font-family: 'Bebas Neue', sans-serif;
     font-size: 18px;
     letter-spacing: 2px;
+    border-radius: 50px;
+    text-decoration: none;
     cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
   }
 
-  /* Fullscreen gallery */
-  .fullscreen-gallery {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.95);
-    z-index: 999;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(5px);
+  .prank-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px #ff6b9d66;
   }
 
-  .fullscreen-gallery.active {
-    display: flex;
-  }
-
-  .fullscreen-image {
-    max-width: 90vw;
-    max-height: 90vh;
-    object-fit: contain;
-    animation: zoomIn 0.3s ease;
-  }
-
-  @keyframes zoomIn {
-    from { transform: scale(0.8); }
-    to { transform: scale(1); }
-  }
-
-  .fullscreen-close {
-    position: absolute;
-    top: 30px;
-    right: 30px;
-    font-size: 40px;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-
-  .fullscreen-close:hover {
-    transform: scale(1.2);
-  }
-
-  @media (max-width: 600px) {
-    .timeline::before { left: 30px; }
-    .moment { flex-direction: column !important; padding-left: 70px; }
+  @media (max-width: 768px) {
+    .moment:nth-child(odd),
+    .moment:nth-child(even) { flex-direction: column; }
+    
     .moment-card { width: 100%; }
-    .moment-dot { left: 30px; top: 20px; position: absolute; }
-    .nav-dots { display: none; }
-    .counter-stats { grid-template-columns: 1fr; }
-    .thumbnails { grid-template-columns: repeat(3, 1fr); }
+    
+    .timeline::before { left: 20px; }
+    
+    .memory-grid { 
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
   }
 </style>
 </head>
 <body>
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-dot" id="cursorDot"></div>
+<!-- Custom Cursor -->
+<div class="cursor"></div>
+<div class="cursor-dot"></div>
 
-<!-- NAV DOTS -->
-<div class="nav-dots">
-  <div class="nav-dot active" onclick="scrollTo('#intro')" title="Intro"></div>
-  <div class="nav-dot" onclick="scrollTo('#love-counter')" title="Love Counter"></div>
-  <div class="nav-dot" onclick="scrollTo('#gallery')" title="Gallery"></div>
-  <div class="nav-dot" onclick="scrollTo('#story')" title="Hamari Kahani"></div>
-  <div class="nav-dot" onclick="scrollTo('#playlist')" title="Playlist"></div>
-  <div class="nav-dot" onclick="scrollTo('#quiz')" title="Quiz"></div>
-  <div class="nav-dot" onclick="scrollTo('#radio')" title="Rashi FM"></div>
-  <div class="nav-dot" onclick="scrollTo('#prank')" title="Woh Pal"></div>
-  <div class="nav-dot" onclick="scrollTo('#capsule')" title="Time Capsule"></div>
-  <div class="nav-dot" onclick="scrollTo('#outro')" title="End"></div>
-</div>
-
-<!-- FULLSCREEN GALLERY -->
-<div class="fullscreen-gallery" id="fullscreenGallery">
-  <img src="" alt="Fullscreen" class="fullscreen-image" id="fullscreenImage">
-  <span class="fullscreen-close" onclick="closeFullscreen()">✕</span>
-</div>
-
-<!-- ===== SECTION 1: CINEMATIC INTRO ===== -->
+<!-- SECTION: INTRO -->
 <section id="intro">
-  <div class="intro-bg"></div>
-  <div class="stars-bg" id="starsContainer"></div>
   <div class="film-grain"></div>
-
-  <div class="film-strip-top" id="filmTop"></div>
-  <div class="film-strip-bottom" id="filmBottom"></div>
-
+  <div class="intro-bg"></div>
+  <div class="stars-bg" id="stars"></div>
+  <div class="film-strip-top">
+    <div class="film-hole"></div>
+    <div class="film-hole"></div>
+    <div class="film-hole"></div>
+    <div class="film-hole"></div>
+  </div>
+  
   <div class="intro-content">
-    <div class="film-label">✦ A Special Production ✦ Presented By Aayu ✦ Only For ✦</div>
-    <div class="intro-title">RASHI</div>
-    <div class="intro-subtitle">The story of us — in all its chaos & magic</div>
-    <div class="tagline">13 APRIL 2024 &nbsp;·&nbsp; WHERE IT ALL BEGAN &nbsp;·&nbsp; ∞</div>
-    <button class="begin-btn" onclick="document.getElementById('love-counter').scrollIntoView({behavior:'smooth'})">
-      ▶ PLAY THE STORY
-    </button>
+    <p class="film-label">❤️ For The One I Love</p>
+    <h1 class="intro-title">RASHI</h1>
+    <p class="intro-subtitle">A Journey Through Love</p>
+    <p class="tagline">~ SCROLL DOWN TO DISCOVER ~</p>
+    <button class="begin-btn" onclick="document.getElementById('giftbox').scrollIntoView({behavior: 'smooth'})">BEGIN</button>
+  </div>
+
+  <div class="film-strip-bottom">
+    <div class="film-hole"></div>
+    <div class="film-hole"></div>
+    <div class="film-hole"></div>
+    <div class="film-hole"></div>
   </div>
 </section>
 
-<!-- ===== SECTION 1.5: LOVE COUNTER ===== -->
-<section id="love-counter">
-  <div class="counter-container">
-    <div class="counter-heart" id="counterHeart">💕</div>
-    <div class="counter-title">Days Together</div>
-    <div class="counter-stats">
-      <div class="stat-box">
-        <span class="stat-number" id="daysCount">0</span>
-        <span class="stat-label">DAYS</span>
+<!-- SECTION: GIFT BOX -->
+<section id="giftbox">
+  <div class="gift-container">
+    <div class="gift-header">
+      <p class="gift-label">✨ First Surprise</p>
+      <h2 class="gift-title">Open The <span>Gift</span></h2>
+      <p class="gift-description">Click on the gift box to reveal your first surprise! 🎁</p>
+    </div>
+
+    <div class="gift-box-wrapper">
+      <div class="gift-box" id="giftBox">
+        <div class="gift-ribbon"></div>
+        <div class="gift-bow"></div>
+        <div class="gift-box-side gift-box-front">🎁</div>
+        <div class="gift-box-side gift-box-back">💝</div>
+        <div class="gift-box-side gift-box-right">💕</div>
+        <div class="gift-box-side gift-box-left">💖</div>
+        <div class="gift-box-side gift-box-top">⭐</div>
+        <div class="gift-box-side gift-box-bottom">✨</div>
       </div>
-      <div class="stat-box">
-        <span class="stat-number" id="hoursCount">0</span>
-        <span class="stat-label">HOURS</span>
-      </div>
-      <div class="stat-box">
-        <span class="stat-number" id="minutesCount">0</span>
-        <span class="stat-label">MINUTES</span>
+    </div>
+
+    <div class="gift-content" id="giftContent">
+      <div class="gift-message">
+        <p class="gift-message-text">
+          "Rashi, आपके साथ हर पल खास है।<br>
+          आपकी हंसी मेरी सबसे बड़ी खुशी है।<br>
+          यह website तुम्हारे लिए बनाया है, तुम्हारे प्यार को celebrate करने के लिए।<br><br>
+          Forever yours 💕"
+        </p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== SECTION 2: PHOTO GALLERY ===== -->
+<!-- SECTION: MEMORY GAME -->
+<section id="memorygame">
+  <div class="game-container">
+    <div class="game-header">
+      <p class="game-label">🎮 Memory Game</p>
+      <h2 class="game-title">Recall Our <span>Memories</span></h2>
+      <div class="game-stats">
+        <div class="game-stat">
+          <div class="game-stat-label">MOVES</div>
+          <div class="game-stat-value" id="gameMovesCount">0</div>
+        </div>
+        <div class="game-stat">
+          <div class="game-stat-label">MATCHED</div>
+          <div class="game-stat-value" id="gameMatchCount">0</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="memory-grid" id="memoryGrid">
+      <!-- Memory cards will be generated by JS -->
+    </div>
+
+    <div class="game-message">
+      <p class="game-message-text" id="gameMessage">Click on cards to find matching pairs! 🎯</p>
+    </div>
+
+    <div style="text-align: center;">
+      <button class="game-reset-btn" onclick="initMemoryGame()">🔄 RESET GAME</button>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: LOVE LETTER DECODER -->
+<section id="loveletter">
+  <div class="letter-container">
+    <div class="letter-header">
+      <p class="letter-label">💌 Secret Message</p>
+      <h2 class="letter-title">Decode My <span style="color: white;">Love</span></h2>
+      <p class="letter-subtitle">Answer the questions to decrypt the secret message 🔐</p>
+    </div>
+
+    <div class="envelope" id="envelope">
+      <div class="encrypted-message" id="encryptedText">
+        🔒 ENCRYPTED MESSAGE 🔒
+      </div>
+
+      <div class="decoder-questions" id="decoderQuestions">
+        <div class="question-box">
+          <p class="question-text">❓ What's my favorite thing about you?</p>
+          <div class="question-options">
+            <label class="option-label">
+              <input type="radio" name="q1" value="smile" class="option-input">
+              <span class="option-text">Your smile 😊</span>
+            </label>
+            <label class="option-label">
+              <input type="radio" name="q1" value="laugh" class="option-input">
+              <span class="option-text">Your laugh 😄</span>
+            </label>
+            <label class="option-label">
+              <input type="radio" name="q1" value="heart" class="option-input">
+              <span class="option-text">Your kind heart 💖</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="question-box">
+          <p class="question-text">❓ When did we first meet?</p>
+          <div class="question-options">
+            <label class="option-label">
+              <input type="radio" name="q2" value="summer" class="option-input">
+              <span class="option-text">Summer 2023</span>
+            </label>
+            <label class="option-label">
+              <input type="radio" name="q2" value="winter" class="option-input">
+              <span class="option-text">Winter 2023</span>
+            </label>
+            <label class="option-label">
+              <input type="radio" name="q2" value="spring" class="option-input">
+              <span class="option-text">Spring 2024</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="question-box">
+          <p class="question-text">❓ What's our special song?</p>
+          <div class="question-options">
+            <label class="option-label">
+              <input type="radio" name="q3" value="song1" class="option-input">
+              <span class="option-text">The one we love 🎵</span>
+            </label>
+            <label class="option-label">
+              <input type="radio" name="q3" value="song2" class="option-input">
+              <span class="option-text">Our favorite melody 🎶</span>
+            </label>
+            <label class="option-label">
+              <input type="radio" name="q3" value="song3" class="option-input">
+              <span class="option-text">Every song reminds me of you 💕</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <button class="decode-btn" onclick="decodeLetter()">🔓 DECRYPT MESSAGE</button>
+
+      <div class="decoded-content" id="decodedContent">
+        <div class="love-message">
+          <p class="love-message-text" id="loveMessageText">
+            "Rashi, तुम मेरी दुनिया हो।<br>
+            तुम्हारे बिना मेरी ज़िंदगी अधूरी है।<br>
+            तुम्हारा प्यार मेरी सबसे बड़ी खुशी है।<br><br>
+            I love you forever and always! 💕<br>
+            - Forever Yours"
+          </p>
+          <div class="love-message-signature">With All My Love ❤️</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: LOVE COUNTER -->
+<section id="love-counter">
+  <div class="counter-container">
+    <div class="counter-heart">💕</div>
+    <h2 class="counter-title">Our Love Story</h2>
+    <div class="counter-stats">
+      <div class="stat-box">
+        <span class="stat-number" id="daysCounter">0</span>
+        <span class="stat-label">DAYS TOGETHER</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-number">∞</span>
+        <span class="stat-label">FOREVER</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-number">100%</span>
+        <span class="stat-label">LOVE</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: GALLERY -->
 <section id="gallery">
   <div class="gallery-container">
     <div class="section-header">
-      <div class="section-label">✦ Our Moments ✦</div>
-      <div class="section-title">PHOTO <span>GALLERY</span></div>
+      <p class="section-label">📸 OUR MOMENTS</p>
+      <h2 class="section-title">Our <span>Gallery</span></h2>
     </div>
 
     <div class="main-slide">
-      <img id="mainImage" src="https://via.placeholder.com/1000x600?text=Photo+1" alt="Gallery" class="slide-image">
-      <div class="slide-counter">
-        <span id="currentSlide">1</span> / <span id="totalSlides">6</span>
-      </div>
+      <img src="https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=800&h=450&fit=crop" alt="Couple" class="slide-image">
+      <div class="slide-counter"><span id="currentSlide">1</span> / <span id="totalSlides">3</span></div>
     </div>
 
     <div class="gallery-controls">
-      <button class="gallery-btn" onclick="previousSlide()">❮</button>
-      <button class="gallery-btn" onclick="document.getElementById('mainImage').click()">⛶</button>
-      <button class="gallery-btn" onclick="nextSlide()">❯</button>
+      <button class="gallery-btn" onclick="changeSlide(-1)">❮</button>
+      <button class="gallery-btn" onclick="changeSlide(1)">❯</button>
     </div>
 
-    <div class="thumbnails" id="thumbnails"></div>
+    <div class="thumbnails" id="thumbnails">
+      <div class="thumbnail active" onclick="currentSlide=0; updateGallery()">
+        <img src="https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=100&h=100&fit=crop" alt="Thumb 1">
+      </div>
+      <div class="thumbnail" onclick="currentSlide=1; updateGallery()">
+        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=100&h=100&fit=crop" alt="Thumb 2">
+      </div>
+      <div class="thumbnail" onclick="currentSlide=2; updateGallery()">
+        <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=100&h=100&fit=crop" alt="Thumb 3">
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- ===== SECTION 3: HAMARI KAHANI ===== -->
+<!-- SECTION: STORY (TIMELINE) -->
 <section id="story">
-  <div class="section-header">
-    <div class="section-label">✦ Chapter 1 ✦</div>
-    <div class="section-title">HAMARI <span>KAHANI</span></div>
-  </div>
-
   <div class="timeline">
-
-    <div class="moment" data-popup="0">
-      <div class="moment-card">
-        <span class="moment-emoji">🌸</span>
-        <div class="moment-date">13 APRIL 2024</div>
-        <div class="moment-title">Shuruaat</div>
-        <div class="moment-desc">Ek normal din tha... ya tha? Nahi — yeh woh din tha jab sab badal gaya. Tum mili aur duniya thodi pink ho gayi. 🩷</div>
-      </div>
+    <div class="moment visible">
       <div class="moment-dot"></div>
+      <div class="moment-card">
+        <span class="moment-emoji">👀</span>
+        <span class="moment-date">FIRST SIGHT</span>
+        <h3 class="moment-title">The Beginning</h3>
+        <p class="moment-desc">जब पहली बार मैंन�� तुम्हें देखा, तो सब कुछ रुक गया...</p>
+      </div>
     </div>
 
-    <div class="moment" data-popup="1">
-      <div class="moment-card">
-        <span class="moment-emoji">😂</span>
-        <div class="moment-date">THE ICONIC MOMENT</div>
-        <div class="moment-title">Police Wali Rashi 👮‍♀️</div>
-        <div class="moment-desc">Usne kaha "shaadi ho rahi hai" aur yeh pagli... didi ko call kar diya, police ko call karne wali thi! Click karo poori kahani suno!</div>
-      </div>
+    <div class="moment visible">
       <div class="moment-dot"></div>
+      <div class="moment-card">
+        <span class="moment-emoji">💬</span>
+        <span class="moment-date">FIRST TALK</span>
+        <h3 class="moment-title">Getting to Know You</h3>
+        <p class="moment-desc">हर बातचीत एक नया सपना लेकर आती थी...</p>
+      </div>
     </div>
 
-    <div class="moment" data-popup="2">
-      <div class="moment-card">
-        <span class="moment-emoji">💌</span>
-        <div class="moment-date">RAAT KE 2 BAJE</div>
-        <div class="moment-title">Woh Late Night Baatein</div>
-        <div class="moment-desc">Jab neend nahi aati thi par tumse baat karne ka mann karta tha. Ghante guzar jaate the... pata nahi chalta.</div>
-      </div>
+    <div class="moment visible">
       <div class="moment-dot"></div>
+      <div class="moment-card">
+        <span class="moment-emoji">❤️</span>
+        <span class="moment-date">CONFESSION</span>
+        <h3 class="moment-title">Love Declaration</h3>
+        <p class="moment-desc">तुम मेरी दुनिया हो, हमेशा के लिए...</p>
+      </div>
     </div>
 
-    <div class="moment" data-popup="3">
-      <div class="moment-card">
-        <span class="moment-emoji">🌙</span>
-        <div class="moment-date">AB BHI & HAMESHA</div>
-        <div class="moment-title">Tum Aur Main</div>
-        <div class="moment-desc">Fights bhi hui, rootha bhi — par wapas aa bhi gaye. Kyunki kuch cheezein hoti hain jo toot ke bhi juri rehti hain. 🩷</div>
-      </div>
+    <div class="moment visible">
       <div class="moment-dot"></div>
+      <div class="moment-card">
+        <span class="moment-emoji">🌹</span>
+        <span class="moment-date">FOREVER</span>
+        <h3 class="moment-title">Till Infinity</h3>
+        <p class="moment-desc">और यह सफर जारी है, हमेशा के लिए...</p>
+      </div>
     </div>
-
   </div>
 </section>
 
-<!-- ===== SECTION 4: CUSTOM PLAYLIST ===== -->
+<!-- SECTION: PLAYLIST -->
 <section id="playlist">
   <div class="playlist-container">
-    <div class="section-header" style="margin-bottom: 40px;">
-      <div class="section-label">✦ Our Soundtrack ✦</div>
-      <div class="playlist-title">🎵 PLAYLIST</div>
-    </div>
+    <h2 class="playlist-title">🎵 Our Songs</h2>
+    <div class="playlist-items" id="playlistItems">
+      <div class="song-item">
+        <span class="song-play-icon">▶️</span>
+        <div class="song-info">
+          <div class="song-name">Tum Tak</div>
+          <div class="song-artist">Pritam</div>
+        </div>
+        <div class="song-duration">4:20</div>
+      </div>
 
-    <div class="playlist-items" id="playlistItems"></div>
+      <div class="song-item">
+        <span class="song-play-icon">▶️</span>
+        <div class="song-info">
+          <div class="song-name">Raabta</div>
+          <div class="song-artist">Agent Vinod</div>
+        </div>
+        <div class="song-duration">5:45</div>
+      </div>
+
+      <div class="song-item">
+        <span class="song-play-icon">▶️</span>
+        <div class="song-info">
+          <div class="song-name">Tera Ban Jaunga</div>
+          <div class="song-artist">Kabir Singh</div>
+        </div>
+        <div class="song-duration">4:35</div>
+      </div>
+
+      <div class="song-item">
+        <span class="song-play-icon">▶️</span>
+        <div class="song-info">
+          <div class="song-name">Kalank</div>
+          <div class="song-artist">Arijit Singh</div>
+        </div>
+        <div class="song-duration">7:12</div>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- ===== SECTION 5: QUIZ ===== -->
+<!-- SECTION: QUIZ -->
 <section id="quiz">
   <div class="quiz-container">
     <div class="quiz-header">
-      <div class="quiz-emoji">🎮</div>
-      <div class="quiz-title">How Well Do You Know Me?</div>
-      <div class="quiz-description">Ek maza ka quiz hai! Dekhte hain kitna tumar samajhte ho. 💕</div>
+      <span class="quiz-emoji">🎯</span>
+      <h2 class="quiz-title">How Well Do You Know Me?</h2>
+      <p class="quiz-description">Answer these questions about our love story!</p>
     </div>
+
+    <button class="quiz-start-btn" onclick="startQuiz()">START QUIZ</button>
 
     <div class="quiz-content" id="quizContent">
       <div class="quiz-progress">
         <div class="quiz-progress-bar" id="quizProgressBar"></div>
       </div>
-      <div class="quiz-question" id="quizQuestion"></div>
+      <p class="quiz-question" id="quizQuestion">Question</p>
       <div class="quiz-options" id="quizOptions"></div>
+      <button class="quiz-start-btn" onclick="nextQuestion()" style="margin-top: 20px;">NEXT</button>
     </div>
 
-    <div class="quiz-result" id="quizResult" style="display: none;">
-      <div class="quiz-result-emoji" id="resultEmoji">🎉</div>
-      <div class="quiz-result-text" id="resultText"></div>
-      <div class="quiz-result-score" id="resultScore"></div>
-      <div class="quiz-result-message" id="resultMessage"></div>
-      <button class="quiz-restart-btn" onclick="startQuiz()">PHIR SE KHELO</button>
+    <div class="quiz-result" id="quizResult" style="display:none;">
+      <span class="quiz-result-emoji" id="resultEmoji">🎉</span>
+      <p class="quiz-result-text" id="resultText">Amazing!</p>
+      <p class="quiz-result-score" id="resultScore">0/0</p>
+      <p class="quiz-result-message" id="resultMessage">You know me so well!</p>
+      <button class="quiz-restart-btn" onclick="resetQuiz()">RESTART</button>
     </div>
-
-    <button class="quiz-start-btn" id="quizStartBtn" onclick="startQuiz()">START QUIZ ▶</button>
   </div>
 </section>
 
-<!-- ===== SECTION 6: RASHI FM ===== -->
+<!-- SECTION: RADIO -->
 <section id="radio">
   <div class="radio-bg"></div>
   <div class="radio-container">
     <div class="radio-device">
-      <div class="radio-title">📻 RASHI FM</div>
-      <div class="radio-freq">102.4 MHz &nbsp;·&nbsp; SIRF TUMHARE LIYE</div>
-
-      <div class="eq-bars" id="eqBars"></div>
-
-      <div class="now-playing">🎵 Tum Tum</div>
-      <div class="artist-name">ENEMY &nbsp;·&nbsp; YOUR SPECIAL SONG</div>
-
-      <a href="https://youtu.be/QKe6GJRK3PM" target="_blank" class="radio-btn">▶ ABHI SUNAO</a>
+      <div class="radio-title">RASHI FM</div>
+      <div class="radio-freq">❤️ 98.6 MHz</div>
+      <div class="eq-bars">
+        <div class="eq-bar" style="--spd: 0.4s; --h: 30px;"></div>
+        <div class="eq-bar" style="--spd: 0.5s; --h: 45px;"></div>
+        <div class="eq-bar" style="--spd: 0.6s; --h: 25px;"></div>
+        <div class="eq-bar" style="--spd: 0.7s; --h: 50px;"></div>
+        <div class="eq-bar" style="--spd: 0.8s; --h: 35px;"></div>
+      </div>
+      <div class="now-playing">Now Playing</div>
+      <div class="artist-name">Tum Tak - Pritam</div>
+      <button class="radio-btn">🎧 TUNE IN</button>
     </div>
 
     <div class="rj-message">
-      <span class="rj-label">🎙️ RJ AAYU — LIVE MESSAGE</span>
-      "Yeh song sirf ek gaana nahi hai Rashi... yeh woh feeling hai jo main describe nahi kar sakta words mein. Jab bhi yeh bajta hai, samjho main tumhare saath hoon. Dedicated to the one who makes everything magical. 🩷"
+      <span class="rj-label">RJ CUPID SAYS:</span>
+      "Rashi, तुम एक खास इंसान हो। तुम्हारी खुशबू, तुम्हारी हंसी, तुम्हारा प्यार - सब कुछ मेरे जीवन का अभिन्न हिस्सा है। हमेशा ऐसे ही रहो, खुश रहो! 💕"
     </div>
   </div>
 </section>
 
-<!-- ===== SECTION 7: THE PRANK ===== -->
+<!-- SECTION: PRANK/FUN -->
 <section id="prank">
   <div class="prank-container">
-    <div class="section-header">
-      <div class="section-label">✦ Chapter 2 — The Unforgettable ✦</div>
-      <div class="section-title">WOH <span style="color:var(--gold)">PAL</span></div>
-    </div>
-
     <div class="prank-card">
-      <span class="prank-emoji-big">😭👮‍♀️📞</span>
-      <div class="prank-title">POLICE CASE NO. 001</div>
-      <div class="prank-story">
-        Ek baar <strong>Aayu ne kaha: "Meri saadi ho rahi hai"</strong>...<br><br>
-        Aur yeh sunke <strong>Rashi ne kya kiya??</strong><br><br>
-        🔴 <strong>Didi ko call kiya</strong> — emergency alert!<br>
-        🔴 <strong>Police ko call karne wali thi</strong> — missing person?!<br>
-        🔴 <strong>Bahut rona dhona</strong> — full drama! 😂<br><br>
-        Matlab... itna pyaar?! Yaar tujhe toh seedha <strong>award milna chahiye</strong> — "Sabse Caring Girlfriend of the Year" 🏆
-      </div>
-      <div class="police-badge" onclick="createConfetti()">🏆 OFFICIAL CERTIFICATE OF EXTRA LOVE</div>
+      <span class="prank-emoji-big">🎪</span>
+      <h2 class="prank-title">One More Thing!</h2>
+      <p class="prank-story">
+        Rashi, यह सब कुछ तुम्हारे लिए बनाया गया है।<br><br>
+        तुम मेरी दुनिया हो। मेरी खुशियों का कारण हो।<br>
+        मेरी हर सुबह तुम्हारे साथ शुरू होती है,<br>
+        और हर रात तुम्हें याद करके खत्म होती है।<br><br>
+        हमेशा मेरे साथ रहो, प्यार करती रहो। 💕
+      </p>
+      <button class="prank-btn" onclick="showSurprise()">🎁 FINAL SURPRISE</button>
     </div>
-  </div>
-</section>
-
-<!-- ===== SECTION 8: TIME CAPSULE ===== -->
-<section id="capsule">
-  <div class="capsule-bg"></div>
-  <div class="capsule-container">
-    <div class="section-header">
-      <div class="section-label">✦ Chapter 3 — Secret ✦</div>
-      <div class="section-title">TIME <span style="color:var(--pink)">CAPSULE</span></div>
-    </div>
-
-    <div class="capsule-box">
-      <div class="capsule-locked" id="capsuleLocked">
-        <span class="lock-icon">🔐</span>
-        <div class="capsule-date-display">13 · 04</div>
-        <div class="capsule-hint">
-          Yeh letter sirf tumhare liye likha gaya hai.<br>
-          Unlock karne ke liye woh date daalo jab hum mile the.<br>
-          <span style="color: var(--pink); font-family: 'Space Mono', monospace; font-size: 12px;">Format: DDMM (example: 1304)</span>
-        </div>
-        <input type="tel" class="unlock-input" id="unlockInput" placeholder="_ _ _ _" maxlength="4">
-        <br>
-        <button class="unlock-btn" onclick="tryUnlock()">🔓 UNLOCK</button>
-      </div>
-
-      <div class="capsule-unlocked" id="capsuleUnlocked">
-        <div class="letter-reveal">
-          <p><strong>Hey Rashi,</strong></p>
-          
-          <p>Tujhe ye likha isliye dikha kyun-ki yeh woh date hai jab sab badal gaya. Jab main ne tujhe pehli baar dekha, main jaanta tha ki yeh kisi aur cheez ki shuruwat hai.</p>
-          
-          <p>Tum sirf koi ladki nahi ho... tu meri <strong>everything</strong> ho. Tum mere dimaag mein hoti ho, mere dil mein hoti ho, aur mere har pal mein hoti ho.</p>
-          
-          <p>Uss raat jab 2 baje ko ham baatein karte the, har ek shabd mujhe mahsus hota tha ki tum special ho. Aur woh police incident? 😂 Ussey pata chal gaya kitna tum care karte ho!</p>
-          
-          <p>Fights hui, rona-dhona hua, par ek cheez constant rahi — TUM. Har ek din tere sath ek naya adventure hai. Tum meri pink world ho, meri gold rush ho, meri sab kuch ho.</p>
-          
-          <p>Agar main kal pe soch raha hoon toh tum uss kal ka reason ho. Agar main aaj khush hoon toh tum uss khushi ka source ho.</p>
-          
-          <p><strong>I love you, Rashi. Forever and always. 🩷</strong></p>
-
-          <div class="letter-signature">— Aayu ∞</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== SECTION 9: OUTRO ===== -->
-<section id="outro">
-  <div class="hearts-bg" id="heartsContainer"></div>
-  <div class="outro-content">
-    <div class="outro-title">Thank you for being <span>MY EVERYTHING</span></div>
-    <div class="outro-sub">
-      This is just a small way to say that you mean the world to me. Every moment with you is a memory I'll cherish forever. 💕
-    </div>
-    <span class="outro-heart">💖</span>
   </div>
 </section>
 
 <script>
-  // ===== CURSOR TRACKING =====
-  const cursor = document.getElementById('cursor');
-  const cursorDot = document.getElementById('cursorDot');
+  // ============ CURSOR CONTROL ============
+  const cursor = document.querySelector('.cursor');
+  const cursorDot = document.querySelector('.cursor-dot');
 
   document.addEventListener('mousemove', (e) => {
-    cursor.style.left = e.clientX - 10 + 'px';
-    cursor.style.top = e.clientY - 10 + 'px';
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
     cursorDot.style.left = e.clientX + 'px';
     cursorDot.style.top = e.clientY + 'px';
   });
 
-  // ===== SCROLL FUNCTIONALITY =====
-  function scrollTo(target) {
-    document.querySelector(target).scrollIntoView({ behavior: 'smooth' });
+  // ============ STARS GENERATION ============
+  function generateStars() {
+    const starsContainer = document.getElementById('stars');
+    for (let i = 0; i < 50; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.width = Math.random() * 3 + 'px';
+      star.style.height = star.style.width;
+      star.style.left = Math.random() * 100 + '%';
+      star.style.top = Math.random() * 100 + '%';
+      star.style.setProperty('--dur', Math.random() * 3 + 2 + 's');
+      starsContainer.appendChild(star);
+    }
   }
+  generateStars();
 
-  // ===== NAV DOTS UPDATE =====
-  window.addEventListener('scroll', () => {
-    const sections = document.querySelectorAll('section');
-    const navDots = document.querySelectorAll('.nav-dot');
-    
-    let current = '';
-    sections.forEach(section => {
-      const sectionTop = section.offsetTop;
-      if (pageYOffset >= sectionTop - 200) {
-        current = section.getAttribute('id');
-      }
-    });
-
-    navDots.forEach(dot => {
-      dot.classList.remove('active');
-      const index = Array.from(navDots).indexOf(dot);
-      if (sections[index] && sections[index].getAttribute('id') === current) {
-        dot.classList.add('active');
-      }
-    });
+  // ============ GIFT BOX ANIMATION ============
+  const giftBox = document.getElementById('giftBox');
+  const giftContent = document.getElementById('giftContent');
+  
+  giftBox.addEventListener('click', () => {
+    if (!giftBox.classList.contains('opened')) {
+      giftBox.classList.add('opened');
+      setTimeout(() => {
+        giftContent.classList.add('revealed');
+        createConfetti();
+      }, 1000);
+    }
   });
 
-  // ===== LOVE COUNTER =====
-  function updateLoveCounter() {
-    const startDate = new Date('2024-04-13').getTime();
-    const now = new Date().getTime();
-    const diff = now - startDate;
+  // ============ CONFETTI ANIMATION ============
+  function createConfetti() {
+    const colors = ['#ff6b9d', '#ffd700', '#c2185b', '#7b2d8b'];
+    for (let i = 0; i < 50; i++) {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti';
+      confetti.style.left = Math.random() * 100 + 'vw';
+      confetti.style.top = '-10px';
+      confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.width = Math.random() * 10 + 5 + 'px';
+      confetti.style.height = confetti.style.width;
+      confetti.style.borderRadius = '50%';
+      document.body.appendChild(confetti);
 
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const duration = Math.random() * 3 + 2;
+      confetti.animate([
+        { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+        { transform: `translateY(${window.innerHeight}px) rotate(720deg)`, opacity: 0 }
+      ], {
+        duration: duration * 1000,
+        easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+      });
 
-    document.getElementById('daysCount').textContent = days;
-    document.getElementById('hoursCount').textContent = hours;
-    document.getElementById('minutesCount').textContent = minutes;
+      setTimeout(() => confetti.remove(), duration * 1000);
+    }
   }
 
-  updateLoveCounter();
-  setInterval(updateLoveCounter, 60000);
+  // ============ MEMORY GAME ============
+  const memories = ['😊', '❤️', '😊', '❤️', '🎶', '🌹', '🎶', '🌹', '👀', '💕', '👀', '💕', '🌙', '⭐', '🌙', '⭐'];
+  let gameCards = [];
+  let flipped = [];
+  let matched = 0;
+  let moves = 0;
 
-  // ===== PHOTO GALLERY =====
-  const galleryImages = [
-    'https://via.placeholder.com/1000x600?text=Photo+1',
-    'https://via.placeholder.com/1000x600?text=Photo+2',
-    'https://via.placeholder.com/1000x600?text=Photo+3',
-    'https://via.placeholder.com/1000x600?text=Photo+4',
-    'https://via.placeholder.com/1000x600?text=Photo+5',
-    'https://via.placeholder.com/1000x600?text=Photo+6'
-  ];
+  function initMemoryGame() {
+    const grid = document.getElementById('memoryGrid');
+    grid.innerHTML = '';
+    gameCards = [...memories].sort(() => 0.5 - Math.random());
+    flipped = [];
+    matched = 0;
+    moves = 0;
+    document.getElementById('gameMovesCount').textContent = '0';
+    document.getElementById('gameMatchCount').textContent = '0';
+    document.getElementById('gameMessage').textContent = 'Click on cards to find matching pairs! 🎯';
 
-  let currentImageIndex = 0;
-
-  function initializeGallery() {
-    const thumbnails = document.getElementById('thumbnails');
-    galleryImages.forEach((img, index) => {
-      const thumb = document.createElement('div');
-      thumb.className = 'thumbnail' + (index === 0 ? ' active' : '');
-      thumb.innerHTML = `<img src="${img}" alt="Thumbnail ${index + 1}">`;
-      thumb.onclick = () => goToSlide(index);
-      thumbnails.appendChild(thumb);
+    gameCards.forEach((card, index) => {
+      const cardEl = document.createElement('div');
+      cardEl.className = 'memory-card';
+      cardEl.textContent = '?';
+      cardEl.dataset.index = index;
+      cardEl.addEventListener('click', () => flipCard(cardEl, index));
+      grid.appendChild(cardEl);
     });
-    document.getElementById('totalSlides').textContent = galleryImages.length;
+  }
+
+  function flipCard(cardEl, index) {
+    if (flipped.length >= 2 || cardEl.classList.contains('flipped') || cardEl.classList.contains('matched')) return;
+
+    cardEl.textContent = gameCards[index];
+    cardEl.classList.add('flipped');
+    flipped.push({ el: cardEl, index });
+
+    if (flipped.length === 2) {
+      moves++;
+      document.getElementById('gameMovesCount').textContent = moves;
+
+      if (gameCards[flipped[0].index] === gameCards[flipped[1].index]) {
+        matched++;
+        document.getElementById('gameMatchCount').textContent = matched;
+        flipped[0].el.classList.add('matched');
+        flipped[1].el.classList.add('matched');
+        flipped = [];
+
+        if (matched === memories.length / 2) {
+          document.getElementById('gameMessage').textContent = `🎉 You won! In ${moves} moves!`;
+        }
+      } else {
+        setTimeout(() => {
+          flipped[0].el.textContent = '?';
+          flipped[1].el.textContent = '?';
+          flipped[0].el.classList.remove('flipped');
+          flipped[1].el.classList.remove('flipped');
+          flipped = [];
+        }, 600);
+      }
+    }
+  }
+
+  initMemoryGame();
+
+  // ============ LOVE LETTER DECODER ============
+  function decodeLetter() {
+    const q1 = document.querySelector('input[name="q1"]:checked');
+    const q2 = document.querySelector('input[name="q2"]:checked');
+    const q3 = document.querySelector('input[name="q3"]:checked');
+
+    if (!q1 || !q2 || !q3) {
+      alert('कृपया सभी सवालों के जवाब दें! Please answer all questions!');
+      return;
+    }
+
+    document.getElementById('envelope').classList.add('opened');
+    document.getElementById('decoderQuestions').style.display = 'none';
+    document.getElementById('decodedContent').classList.add('revealed');
+    createConfetti();
+  }
+
+  // ============ GALLERY ============
+  const galleryImages = [
+    'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=800&h=450&fit=crop',
+    'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&h=450&fit=crop',
+    'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&h=450&fit=crop'
+  ];
+  let currentSlide = 0;
+
+  function changeSlide(n) {
+    currentSlide += n;
+    if (currentSlide >= galleryImages.length) currentSlide = 0;
+    if (currentSlide < 0) currentSlide = galleryImages.length - 1;
     updateGallery();
   }
 
   function updateGallery() {
-    document.getElementById('mainImage').src = galleryImages[currentImageIndex];
-    document.getElementById('currentSlide').textContent = currentImageIndex + 1;
-    
-    document.querySelectorAll('.thumbnail').forEach((thumb, index) => {
-      thumb.classList.toggle('active', index === currentImageIndex);
+    document.querySelector('.slide-image').src = galleryImages[currentSlide];
+    document.getElementById('currentSlide').textContent = currentSlide + 1;
+    document.querySelectorAll('.thumbnail').forEach((thumb, i) => {
+      thumb.classList.toggle('active', i === currentSlide);
     });
   }
 
-  function nextSlide() {
-    currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
-    updateGallery();
-  }
-
-  function previousSlide() {
-    currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
-    updateGallery();
-  }
-
-  function goToSlide(index) {
-    currentImageIndex = index;
-    updateGallery();
-  }
-
-  document.getElementById('mainImage').onclick = function() {
-    document.getElementById('fullscreenGallery').classList.add('active');
-    document.getElementById('fullscreenImage').src = this.src;
-  };
-
-  function closeFullscreen() {
-    document.getElementById('fullscreenGallery').classList.remove('active');
-  }
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeFullscreen();
-    if (e.key === 'ArrowRight') nextSlide();
-    if (e.key === 'ArrowLeft') previousSlide();
-  });
-
-  initializeGallery();
-
-  // ===== PLAYLIST =====
-  const playlistData = [
-    { name: 'Tum Tum', artist: 'ENEMY', duration: '3:02', url: 'https://youtu.be/QKe6GJRK3PM' },
-    { name: 'Tum Ho', artist: 'Mohit Chauhan', duration: '5:04', url: '#' },
-    { name: 'Khud Se Zyada Tum', artist: 'Arijit Singh', duration: '4:15', url: '#' },
-    { name: 'Dil Diyan Gallan', artist: 'Atif Aslam', duration: '3:50', url: '#' },
-    { name: 'Tumhe Apna Banane Ka', artist: 'Bhavin Bhanushali', duration: '3:45', url: '#' }
-  ];
-
-  function initializePlaylist() {
-    const playlistItems = document.getElementById('playlistItems');
-    playlistData.forEach((song, index) => {
-      const item = document.createElement('div');
-      item.className = 'song-item' + (index === 0 ? ' playing' : '');
-      item.innerHTML = `
-        <div class="song-play-icon">${index === 0 ? '▶' : '♪'}</div>
-        <div class="song-info">
-          <div class="song-name">${song.name}</div>
-          <div class="song-artist">${song.artist}</div>
-        </div>
-        <div class="song-duration">${song.duration}</div>
-      `;
-      item.onclick = () => playSong(index, item);
-      playlistItems.appendChild(item);
-    });
-  }
-
-  function playSong(index, element) {
-    document.querySelectorAll('.song-item').forEach(item => {
-      item.classList.remove('playing');
-      item.querySelector('.song-play-icon').textContent = '♪';
-    });
-    element.classList.add('playing');
-    element.querySelector('.song-play-icon').textContent = '▶';
-    
-    const song = playlistData[index];
-    if (song.url !== '#') {
-      window.open(song.url, '_blank');
-    }
-  }
-
-  initializePlaylist();
-
-  // ===== QUIZ =====
+  // ============ QUIZ ============
   const quizQuestions = [
     {
-      question: 'Hum dono kab mile the?',
-      options: ['13 April 2024', '14 April 2024', '12 April 2024', '15 April 2024'],
-      correct: 0
+      q: "What's the most important thing in our relationship?",
+      options: ['Trust', 'Love', 'Communication', 'Honesty'],
+      correct: 1
     },
     {
-      question: 'Woh Iconic moment kya tha?',
-      options: ['Police call karna', 'Late night talks', 'First kiss', 'Meeting family'],
-      correct: 0
+      q: "When do you feel most loved?",
+      options: ['When we talk', 'When we are together', 'When you think of me', 'Always'],
+      correct: 1
     },
     {
-      question: 'Hamari kahani mein sabse pehla moment kon sa tha?',
-      options: ['Shuruaat', 'Police Wali Rashi', 'Late Night Baatein', 'Fights'],
-      correct: 0
-    },
-    {
-      question: 'Mere favorite song ka naam?',
-      options: ['Tum Tum', 'Enemy', 'Rashi FM', 'Love Song'],
-      correct: 0
-    },
-    {
-      question: 'Yeh website kiske liye banaya gaya?',
-      options: ['Rashi', 'Aayu', 'Family', 'Friends'],
-      correct: 0
+      q: "What's our love language?",
+      options: ['Words', 'Actions', 'Time', 'Everything'],
+      correct: 3
     }
   ];
 
-  let currentQuestionIndex = 0;
+  let currentQuestion = 0;
   let quizScore = 0;
 
   function startQuiz() {
-    currentQuestionIndex = 0;
-    quizScore = 0;
-    document.getElementById('quizStartBtn').style.display = 'none';
-    document.getElementById('quizResult').style.display = 'none';
+    document.querySelector('.quiz-start-btn').style.display = 'none';
     document.getElementById('quizContent').classList.add('active');
     loadQuestion();
   }
 
   function loadQuestion() {
-    const question = quizQuestions[currentQuestionIndex];
-    document.getElementById('quizQuestion').textContent = question.question;
-    
-    const progress = ((currentQuestionIndex + 1) / quizQuestions.length) * 100;
-    document.getElementById('quizProgressBar').style.width = progress + '%';
-
-    const optionsContainer = document.getElementById('quizOptions');
-    optionsContainer.innerHTML = '';
-    
-    question.options.forEach((option, index) => {
+    const q = quizQuestions[currentQuestion];
+    document.getElementById('quizQuestion').textContent = q.q;
+    const optionsDiv = document.getElementById('quizOptions');
+    optionsDiv.innerHTML = '';
+    q.options.forEach((opt, i) => {
       const btn = document.createElement('div');
       btn.className = 'quiz-option';
-      btn.textContent = option;
-      btn.onclick = () => selectAnswer(index);
-      optionsContainer.appendChild(btn);
+      btn.textContent = opt;
+      btn.onclick = () => selectAnswer(i);
+      optionsDiv.appendChild(btn);
     });
+    updateProgressBar();
   }
 
   function selectAnswer(index) {
-    const question = quizQuestions[currentQuestionIndex];
-    const options = document.querySelectorAll('.quiz-option');
-    
-    options.forEach(opt => opt.onclick = null);
-
-    if (index === question.correct) {
+    if (quizQuestions[currentQuestion].correct === index) {
       quizScore++;
-      options[index].classList.add('correct');
+      document.querySelectorAll('.quiz-option')[index].classList.add('correct');
     } else {
-      options[index].classList.add('wrong');
-      options[question.correct].classList.add('correct');
+      document.querySelectorAll('.quiz-option')[index].classList.add('wrong');
     }
+    document.querySelectorAll('.quiz-option').forEach(opt => opt.style.pointerEvents = 'none');
+  }
 
-    setTimeout(() => {
-      currentQuestionIndex++;
-      if (currentQuestionIndex < quizQuestions.length) {
-        loadQuestion();
-      } else {
-        endQuiz();
-      }
-    }, 1500);
+  function nextQuestion() {
+    currentQuestion++;
+    if (currentQuestion >= quizQuestions.length) {
+      endQuiz();
+    } else {
+      loadQuestion();
+    }
+  }
+
+  function updateProgressBar() {
+    const progress = ((currentQuestion + 1) / quizQuestions.length) * 100;
+    document.getElementById('quizProgressBar').style.width = progress + '%';
   }
 
   function endQuiz() {
-    document.getElementById('quizContent').classList.remove('active');
+    document.getElementById('quizContent').style.display = 'none';
     document.getElementById('quizResult').style.display = 'block';
     
-    const percentage = (quizScore / quizQuestions.length) * 100;
+    const percent = (quizScore / quizQuestions.length) * 100;
+    document.getElementById('resultScore').textContent = `${quizScore}/${quizQuestions.length}`;
     
-    let emoji = '😢';
-    let text = 'Oops!';
-    let message = 'Dhundha lo answers! 😂';
-
-    if (percentage >= 80) {
-      emoji = '🤩';
-      text = 'PERFECT!';
-      message = 'Tum sach mein mujhe samjhte ho! I love you 💕';
-    } else if (percentage >= 60) {
-      emoji = '😊';
-      text = 'GREAT!';
-      message = 'Bahut acha! Ab zyada acha hona chahiye 😉';
-    } else if (percentage >= 40) {
-      emoji = '😏';
-      text = 'OKAY!';
-      message = 'Abhi bhi kuch seekhna baaki hai';
-    }
-
-    document.getElementById('resultEmoji').textContent = emoji;
-    document.getElementById('resultText').textContent = text;
-    document.getElementById('resultScore').textContent = quizScore + '/' + quizQuestions.length;
-    document.getElementById('resultMessage').textContent = message;
-  }
-
-  // ===== CONFETTI EFFECT =====
-  function createConfetti() {
-    const colors = ['#ff6b9d', '#ffd700', '#7b2d8b', '#c2185b'];
-    for (let i = 0; i < 50; i++) {
-      const confetti = document.createElement('div');
-      confetti.className = 'confetti';
-      confetti.textContent = '🎉';
-      confetti.style.left = Math.random() * window.innerWidth + 'px';
-      confetti.style.top = '-10px';
-      confetti.style.color = colors[Math.floor(Math.random() * colors.length)];
-      confetti.style.fontSize = (10 + Math.random() * 20) + 'px';
-      confetti.style.opacity = Math.random() * 0.5 + 0.5;
-      document.body.appendChild(confetti);
-
-      let y = 0;
-      let x = parseInt(confetti.style.left);
-      let vel = Math.random() * 5 + 2;
-      let angle = Math.random() * Math.PI;
-
-      const fall = () => {
-        y += vel;
-        x += Math.cos(angle) * 2;
-        confetti.style.top = y + 'px';
-        confetti.style.left = x + 'px';
-        confetti.style.opacity = 1 - (y / window.innerHeight);
-        
-        if (y < window.innerHeight && confetti.style.opacity > 0) {
-          requestAnimationFrame(fall);
-        } else {
-          confetti.remove();
-        }
-      };
-      fall();
-    }
-  }
-
-  // ===== FLOATING HEARTS =====
-  function createFloatingHearts() {
-    const container = document.getElementById('heartsContainer');
-    setInterval(() => {
-      const heart = document.createElement('div');
-      heart.className = 'floating-heart';
-      heart.textContent = '💕';
-      heart.style.left = Math.random() * 100 + '%';
-      heart.style.setProperty('--size', (20 + Math.random() * 40) + 'px');
-      heart.style.setProperty('--dur', (3 + Math.random() * 3) + 's');
-      heart.style.setProperty('--delay', Math.random() * 0.5 + 's');
-      container.appendChild(heart);
-
-      setTimeout(() => heart.remove(), 6000);
-    }, 300);
-  }
-
-  createFloatingHearts();
-
-  // ===== EQ BARS ANIMATION =====
-  function initializeEqBars() {
-    const container = document.getElementById('eqBars');
-    for (let i = 0; i < 8; i++) {
-      const bar = document.createElement('div');
-      bar.className = 'eq-bar';
-      bar.style.setProperty('--h', (10 + Math.random() * 30) + 'px');
-      bar.style.setProperty('--spd', (0.3 + Math.random() * 0.5) + 's');
-      container.appendChild(bar);
-    }
-  }
-
-  initializeEqBars();
-
-  // ===== FILM STRIP =====
-  function initializeFilmStrip() {
-    const filmTop = document.getElementById('filmTop');
-    const filmBottom = document.getElementById('filmBottom');
-    
-    for (let i = 0; i < 20; i++) {
-      const hole = document.createElement('div');
-      hole.className = 'film-hole';
-      filmTop.appendChild(hole.cloneNode(true));
-      filmBottom.appendChild(hole.cloneNode(true));
-    }
-  }
-
-  initializeFilmStrip();
-
-  // ===== STARS ANIMATION =====
-  function createStars() {
-    const starsContainer = document.getElementById('starsContainer');
-    for (let i = 0; i < 50; i++) {
-      const star = document.createElement('div');
-      star.className = 'star';
-      star.style.left = Math.random() * 100 + '%';
-      star.style.top = Math.random() * 100 + '%';
-      star.style.width = (1 + Math.random() * 2) + 'px';
-      star.style.height = star.style.width;
-      star.style.setProperty('--dur', (2 + Math.random() * 3) + 's');
-      starsContainer.appendChild(star);
-    }
-  }
-
-  createStars();
-
-  // ===== TIME CAPSULE UNLOCK =====
-  function tryUnlock() {
-    const input = document.getElementById('unlockInput').value;
-    if (input === '1304') {
-      document.getElementById('capsuleLocked').style.display = 'none';
-      document.getElementById('capsuleUnlocked').style.display = 'block';
-      createConfetti();
+    if (percent === 100) {
+      document.getElementById('resultEmoji').textContent = '🌟';
+      document.getElementById('resultText').textContent = 'Perfect Score!';
+      document.getElementById('resultMessage').textContent = 'You know me inside and out! 💕';
+    } else if (percent >= 66) {
+      document.getElementById('resultEmoji').textContent = '😍';
+      document.getElementById('resultText').textContent = 'Amazing!';
+      document.getElementById('resultMessage').textContent = 'You know me so well!';
     } else {
-      document.getElementById('capsuleUnlocked').style.display = 'none';
-      document.getElementById('capsuleLocked').style.display = 'block';
-      document.getElementById('capsuleUnlocked').classList.add('wrong-shake');
-      setTimeout(() => document.getElementById('capsuleUnlocked').classList.remove('wrong-shake'), 400);
+      document.getElementById('resultEmoji').textContent = '😊';
+      document.getElementById('resultText').textContent = 'Great!';
+      document.getElementById('resultMessage').textContent = 'Learn more about me! 💕';
     }
   }
 
-  // ===== INTERSECTION OBSERVER FOR ANIMATIONS =====
+  function resetQuiz() {
+    currentQuestion = 0;
+    quizScore = 0;
+    document.getElementById('quizResult').style.display = 'none';
+    document.querySelector('.quiz-start-btn').style.display = 'inline-block';
+  }
+
+  // ============ DAYS COUNTER ============
+  function updateDaysCounter() {
+    const startDate = new Date('2024-01-01');
+    const today = new Date();
+    const days = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+    document.getElementById('daysCounter').textContent = days;
+  }
+  updateDaysCounter();
+
+  // ============ INTERSECTION OBSERVER ============
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
       }
     });
-  }, { threshold: 0.1 });
+  });
 
   document.querySelectorAll('.moment').forEach(el => observer.observe(el));
-</script>
 
+  // ============ PLAYLIST INTERACTION ============
+  document.querySelectorAll('.song-item').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.song-item').forEach(s => s.classList.remove('playing'));
+      item.classList.add('playing');
+    });
+  });
+
+  // ============ FINAL SURPRISE ============
+  function showSurprise() {
+    alert('Rashi, तुम मेरी सबसे बड़ी खुशी हो। हमेशा ऐसे ही खुश रहो! 💕\n\nTu meri sabse badi khushi hai. Forever yours! ❤️');
+    createConfetti();
+  }
+</script>
 </body>
 </html>
